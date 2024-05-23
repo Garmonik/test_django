@@ -20,20 +20,24 @@ from .models import UserProfile, Test, Questions, Result, ActiveTest
 from .utils import get_token
 
 
+@csrf_protect
 def admin_settings_view(request):
     return render(request, 'home.html')
 
 
+@csrf_protect
 def tests(request):
     test = Test.objects.filter(user=request.user)
     return render(request, 'tests/index.html', {'tests': test})
 
 
+@csrf_protect
 def test_get(request, id):
     test = get_object_or_404(Test, id=id, user=request.user)
     return render(request, 'tests/get.html', {'test': test})
 
 
+@csrf_protect
 def start_test(request, id):
     try:
         test = get_object_or_404(Test, id=id, user=request.user)
@@ -70,6 +74,7 @@ def start_test(request, id):
         return redirect(reverse('tests'))
 
 
+@csrf_protect
 def testing(request, id):
     try:
         active_test = get_object_or_404(ActiveTest, id=id, user=request.user)
@@ -101,6 +106,7 @@ def testing(request, id):
         return redirect(reverse('tests'))
 
 
+@csrf_protect
 def testing_save(request, id):
     active_test = get_object_or_404(ActiveTest, id=id, user=request.user)
     number = request.GET.get('number')
@@ -124,6 +130,7 @@ def testing_save(request, id):
     return HttpResponseRedirect(reverse('testing', args=[active_test.id]) + f'?question={number + 1}')
 
 
+@csrf_protect
 def testing_finish_test(request, id):
     active_test = get_object_or_404(ActiveTest, id=id, user=request.user)
     variants_list = json.loads(active_test.variants)
@@ -142,6 +149,7 @@ def testing_finish_test(request, id):
     return render(request, 'tests/finish_test.html', {"questions": questions})
 
 
+@csrf_protect
 def results(request):
     result = ActiveTest.objects.filter(user=request.user)
     return render(request, 'result/index.html', {'results': result})
@@ -152,6 +160,7 @@ def get_results(request, id):
     return render(request, 'result/get.html', {'results': res})
 
 
+@csrf_protect
 def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -165,6 +174,7 @@ def register(request):
     return render(request, 'facecontrol/register.html', {'form': form})
 
 
+@csrf_protect
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -182,6 +192,7 @@ def login_view(request):
     return render(request, 'facecontrol/login.html', {'form': form})
 
 
+@csrf_protect
 def logout_view(request):
     response = redirect('/login/')
     response.set_cookie('access_token', None, max_age=0)
