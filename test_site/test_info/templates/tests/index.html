@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <h1 class="page-header">Тесты Анюты)))</h1>
+  {% if messages %}
+    <div class="alert alert-success">
+      <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <h3>
+    <ul>
+      {% for p in tests %}
+      <li><a href="{% url 'test_get' id=p.id %}" class="btn">{{ p.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </h3>
+</div>
+{% endblock %}

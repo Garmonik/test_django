@@ -1,0 +1,31 @@
+<style>
+  .user-name a {
+    background-color: black;
+    color: white;
+  }
+</style>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'home' %}">Тесты для Анюты)))</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><a href="{% url 'home' %}">Главная</a></li>
+            <li class="{% if request.resolver_match.url_name == 'tests' %}active{% endif %}"><a href="{% url 'tests' %}">Тесты</a></li>
+            <li class="{% if request.resolver_match.url_name == 'result' %}active{% endif %}"><a href="{% url 'result' %}">Результаты</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="user-name"><a href="home">{{ request.user.first_name }} {{ request.user.last_name }}</a></li>
+            <li><a href="{% url 'logout' %}">Выйти</a></li>
+          </ul>
+        </div>
+      </div>
+</nav>

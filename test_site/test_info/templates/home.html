@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1 class="page-header">Тесты для Анюты)))</h1>
+
+<h2>Личная информация</h2>
+<p>Почта: {{ request.user.email }}</p>
+<p>Имя: {{ request.user.first_name }}</p>
+<p>Фамилия: {{ request.user.last_name }}</p>
+<p>Телефон: {{ request.user.username }}</p>
+
+{% endblock %}

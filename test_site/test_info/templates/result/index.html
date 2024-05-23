@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+  <h1 class="page-header">Результаты тестов</h1>
+  {% if messages %}
+    <div class="alert alert-success">
+      <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+    <table class="table">
+
+    <tr>
+        <th>ID теста</th>
+        <th>Максимальный балл</th>
+        <th>Твой результат</th>
+    </tr>
+{% for i in data %}
+<tr>
+    <td><a href="{% url 'get_result' id=p.id %}" class="btn">{{ p.id }}</a></td>
+    <td><a>{{ p.max_answers }}</a></td>
+    <td><a>{{ p.correct_answers }}</a></td>
+</tr>
+{% endfor %}
+  </table>
+</div>
+{% endblock %}

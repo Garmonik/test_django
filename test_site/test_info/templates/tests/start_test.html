@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block main %}
+
+<div class="container">
+
+    <h1 class="page-header text-center">{{ test.name }}</h1>
+
+
+
+    <!-- Полоса с номерами вопросов -->
+
+    <div class="question-progress text-center">
+
+        {% for question in questions %}
+
+            <span class="badge {% if question.id == current_question.id %}badge-primary{% else %}badge-secondary{% endif %}">
+
+                {{ forloop.counter }}
+
+            </span>
+
+        {% endfor %}
+
+    </div>
+
+    <br>
+
+
+
+    <!-- Текущий вопрос и варианты ответов -->
+
+    <form method="POST" action="{% url 'submit_answer' test.id current_question.id %}">
+
+        {% csrf_token %}
+
+        <div class="question">
+
+            <h3>{{ current_question.question }}</h3>
+
+            <div class="variants">
+
+                {% for variant in current_question.variants %}
+
+                    <div class="form-check">
+
+                        <input type="checkbox" class="form-check-input" id="variant{{ forloop.counter }}" name="selected_answers" value="{{ variant }}">
+
+                        <label class="form-check-label" for="variant{{ forloop.counter }}">{{ variant }}</label>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="buttons text-center">
+
+            <!-- Кнопка для завершения теста -->
+
+            <a href="{% url 'finish_test' test.id %}" class="btn btn-danger">Завершить тест</a>
+
+            <!-- Кнопка для отправки ответа и перехода к следующему вопросу -->
+
+            <button type="submit" class="btn btn-primary">Следующий вопрос</button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

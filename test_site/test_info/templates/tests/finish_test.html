@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+
+
+{% block main %}
+
+<style>
+
+    .question {
+
+        margin-bottom: 20px;
+
+    }
+
+    .question h3 {
+
+        margin: 0;
+
+    }
+
+    .variants {
+
+        list-style-type: none;
+
+        padding: 0;
+
+    }
+
+    .variants li {
+
+        margin-bottom: 5px;
+
+        display: flex;
+
+        align-items: center;
+
+    }
+
+    .variant-checkbox {
+
+        margin-right: 10px;
+
+    }
+
+    .correct {
+
+        color: green;
+
+    }
+
+    .incorrect {
+
+        color: red;
+
+    }
+
+</style>
+
+<h1>Результаты тестирования</h1>
+
+<div id="results">
+
+    {% for item in questions %}
+
+        <div class="question">
+
+            <h3>{{ item.question }}</h3>
+
+            <ul class="variants">
+
+                {% for variant in item.variants %}
+
+                    <li class="{% if variant in item.answer %}correct{% elif variant in item.your_answer %}incorrect{% endif %}">
+
+                        {% if variant in item.your_answer %}
+
+                            <input type="checkbox" class="variant-checkbox" checked disabled>
+
+                        {% else %}
+
+                            <input type="checkbox" class="variant-checkbox" disabled>
+
+                        {% endif %}
+
+                        {{ variant }}
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

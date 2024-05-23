@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+
+
+{% block main %}
+
+<div class="container">
+
+  <h1 class="page-header text-center">Информация о тесте "{{ test.name }}"</h1>
+
+
+
+  <!-- Форма отправляется методом GET и использует URL 'start_test' с параметром test.id -->
+
+  <form method="GET" action="{% url 'start_test' test.id %}">
+
+    <!-- Токен CSRF для безопасности -->
+
+    {% csrf_token %}
+
+
+
+    <!-- Ввод значений для диапазона вопросов -->
+
+    <div class="form-group text-center">
+
+      <label for="from_input">Выдать вопросы от</label>
+
+      <input type="number" id="from_input" name="f" class="form-control" placeholder="Начальный номер" style="display:inline-block; width:auto;">
+
+      <label for="to_input">и до</label>
+
+      <input type="number" id="to_input" name="l" class="form-control" placeholder="Конечный номер" style="display:inline-block; width:auto;">
+
+    </div>
+
+
+
+    <!-- Центрирование кнопки через flexbox -->
+
+    <div class="text-center">
+
+      <!-- Кнопка для отправки формы -->
+
+      <button type="submit" class="btn btn-primary btn-lg" style="padding: 15px 30px;">Начать тест</button>
+
+    </div>
+
+  </form>
+
+</div>
+
+{% endblock %}

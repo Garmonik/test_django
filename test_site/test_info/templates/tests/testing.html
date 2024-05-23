@@ -1,0 +1,296 @@
+
+
+{% extends 'base.html' %}
+
+
+
+{% block main %}
+
+
+
+<style>
+
+
+
+.question-nav {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+
+    gap: 5px;
+
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+.question-button {
+
+    background-color: #f0f0f0;
+
+    border: 1px solid #ccc;
+
+    border-radius: 50%;
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin: 5px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: background-color 0.3s, border-color 0.3s;
+
+}
+
+
+
+.question-button.active {
+
+    background-color: #007bff;
+
+    color: white;
+
+
+
+    border-color: #007bff;
+
+}
+
+
+
+.question-button:hover {
+
+    background-color: #e0e0e0;
+
+}
+
+
+
+.buttons {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 20px;
+
+}
+
+
+
+.btn {
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    text-decoration: none;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: background-color 0.3s;
+
+}
+
+
+
+.btn-next {
+
+    background-color: #28a745;
+
+}
+
+
+
+.btn-next:hover {
+
+    background-color: #218838;
+
+}
+
+
+
+.btn-finish {
+
+    background-color: #dc3545;
+
+}
+
+
+
+.btn-finish:hover {
+
+    background-color: #c82333;
+
+}
+
+
+
+</style>
+
+
+
+<div class="question-nav">
+
+    {% for i in questions_range %}
+
+        <a href="?question={{ i }}">
+
+            <div class="question-button {% if i == current_question %}active{% endif %}">{{ i }}</div>
+
+        </a>
+
+    {% endfor %}
+
+</div>
+
+
+
+<div class="question-section">
+
+    <h2>{{ question }}</h2>
+
+    <div class="variants">
+
+        {% for variant in variants %}
+
+            <div class="variant {% if variant in your_answer %}selected{% endif %}">
+
+                <input type="checkbox" id="variant-{{ forloop.counter }}" value="{{ variant }}" {% if variant in your_answer %}checked{% endif %} onclick="selectVariant('{{ variant }}')">
+
+                <label for="variant-{{ forloop.counter }}">{{ variant }}</label>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+
+<div class="buttons">
+
+    <a href="#" id="next-button" class="btn btn-next">Следующий вопрос</a>
+
+    <a href="#" id="finish-button" class="btn btn-finish">Завершить тест</a>
+
+</div>
+
+
+
+<form id="answer-form" method="post" style="display: none;">
+
+    {% csrf_token %}
+
+    <input type="hidden" name="your_answer" id="your-answer-input" value="{{ your_answer|join:',' }}">
+
+</form>
+
+
+
+<script>
+
+    var yourAnswer = {% if your_answer %}{{ your_answer|safe }}{% else %}[] {% endif %};
+
+
+
+    function selectVariant(variant) {
+
+        var index = yourAnswer.indexOf(variant);
+
+        if (index === -1) {
+
+            yourAnswer.push(variant);
+
+        } else {
+
+            yourAnswer.splice(index, 1);
+
+        }
+
+        document.getElementById('your-answer-input').value = yourAnswer.join(',');
+
+        renderVariants();
+
+    }
+
+
+
+    function renderVariants() {
+
+        document.querySelectorAll('.variant input').forEach(function (element) {
+
+            if (yourAnswer.indexOf(element.value) !== -1) {
+
+                element.checked = true;
+
+            } else {
+
+                element.checked = false;
+
+            }
+
+        });
+
+    }
+
+    renderVariants();
+
+
+
+    document.getElementById('next-button').addEventListener('click', function(event) {
+
+        event.preventDefault();
+
+        console.log('Next button clicked');
+
+        var form = document.getElementById('answer-form');
+
+        form.action = "{% url 'testing_save' test_id %}?number={{ current_question }}";
+
+        console.log('Form action set to:', form.action);
+
+        form.submit();
+
+    });
+
+
+
+    document.getElementById('finish-button').addEventListener('click', function(event) {
+
+        event.preventDefault();
+
+        console.log('Finish button clicked');
+
+        var form = document.getElementById('answer-form');
+
+        form.action = "{% url 'testing_save' test_id %}?number={{ current_question }}&finish=True";
+
+        console.log('Form action set to:', form.action);
+
+        form.submit();
+
+    });
+
+</script>
+{% endblock %}
