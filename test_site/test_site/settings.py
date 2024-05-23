@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'test_site.middleware.GetUserMiddleware',
-    'test_site.middleware.CheckTokenMiddleware',
+    # 'test_site.middleware.CheckTokenMiddleware',
     'test_site.middleware.CheckValidPathMiddleware',
 ]
 

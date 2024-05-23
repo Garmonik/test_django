@@ -12,18 +12,17 @@ import jwt
 
 def get_user(request):
     try:
-        if 'access_token' in request.COOKIES:
-            token = request.COOKIES['access_token']
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            email = payload.get('email')
-            access_key = payload.get('access_key')
-            user = UserProfile.objects.filter(email=email, access_key=access_key)
-            if payload and user.exists():
-                user = user.first()
-                return user
+        # if 'access_token' in request.COOKIES:
+        #     token = request.COOKIES['access_token']
+        #     payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        #     email = payload.get('email')
+        #     access_key = payload.get('access_key')
+        user = UserProfile.objects.first()
+        # if payload and user.exists():
+        #     user = user.first()
+        return user
     except:
         return None
-    return None
 
 
 def universal_middleware(func):
